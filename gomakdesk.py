@@ -18,13 +18,14 @@ from PyQt5.QtWidgets import (
     QMessageBox
 )
 
-class PurchaseInvoiceUI(QWidget):
+class PurchaseInvoiceUI(QDialog):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Purchase Invoice")
-        self.resize(1920, 950)
-        self.setMinimumSize(1600, 850)
+        # self.resize(1520, 950)
+        # self.setMinimumSize(1600, 850)
+        self.setGeometry(100, 50, 1200, 700)
 
         self.setStyleSheet("""
             QWidget{
@@ -44,7 +45,7 @@ class PurchaseInvoiceUI(QWidget):
                 border-radius:6px;
                 padding:10px;
                 color:#333;
-                font-size:15px;
+                font-size:14px;
             }
 
             QLineEdit:focus,QComboBox:focus,QTextEdit:focus{
@@ -373,7 +374,7 @@ class PurchaseInvoiceUI(QWidget):
         unpaid = QLabel("Unpaid 40,000.00")
         unpaid.setAlignment(Qt.AlignRight)
         unpaid.setStyleSheet("""
-            font-size:16px;
+            font-size:14px;
             color:#2d7dd2;
             background:transparent;
         """)
@@ -402,7 +403,6 @@ class PurchaseInvoiceUI(QWidget):
         table.setMinimumHeight(300)
 
         headers = [
-            "➕",
             "Product",
             "Description",
             "Warehouse",
@@ -575,8 +575,9 @@ class DashboardUI(QWidget):
         super().__init__()
 
         self.setWindowTitle("Wizard Cloud Dashboard")
-        self.resize(1920, 1000)
-        self.setMinimumSize(1400, 850)
+        # self.resize(1920, 1000)
+        self.setGeometry(100, 50, 1200, 700)
+        # self.setMinimumSize(1400, 850)
 
         self.setStyleSheet("""
             QWidget{
