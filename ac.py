@@ -5,7 +5,9 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem, QFrame, QCompleter
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from num2words import num2words
+from pathlib import Path
 
 
 class PurchaseInvoiceUI(QWidget):
@@ -157,19 +159,23 @@ class PurchaseInvoiceUI(QWidget):
 
         # ================= TABLE =================
         self.table = QTableWidget()
-        self.table.setColumnCount(10)
-        self.table.setColumnWidth(0, 200)
+        self.table.setColumnCount(11)
+        self.table.setColumnWidth(0, 10)
         self.table.setColumnWidth(1, 300)
         self.table.setColumnWidth(2, 120)
         self.table.setColumnWidth(4, 90)
         self.table.setHorizontalHeaderLabels([
             "Product", "Description", "Warehouse",
-            "Qty", "Unit", "Unit Price", "Amount",	"Disc%","Discount", "Gross Amount"
+            "Qty", "Unit", "Unit Price", "Amount",	"Disc%","Discount", "Gross Amount",
         ])
 
 
         # Optional: double click row to delete
         # self.table.doubleClicked.connect(self.remove_row)
+        header_item = QTableWidgetItem("")
+        header_item.setIcon(QIcon("icons/add_32x32.png"))
+        self.table.setHorizontalHeaderItem(0, header_item)
+        self.table.horizontalHeader().sectionClicked.connect(self.onHeader)
 
         self.table.itemChanged.connect(self.handle_item_change)
 
@@ -244,7 +250,8 @@ class PurchaseInvoiceUI(QWidget):
             lambda r=row, le=line: self.product_selected(r, le.text())
         )
 
-        self.table.setCellWidget(row, 0, line)
+        self.table.setCellWidget(row, 1, line)
+
 
 
         # Default values
@@ -254,10 +261,18 @@ class PurchaseInvoiceUI(QWidget):
             self.table.setItem(row, col, item)
 
         # Read-only calculated fields
-        for col in [6, 8, 9]:
+        for col in [0, 6, 8, 9]:
             item = QTableWidgetItem("")
             item.setFlags(Qt.ItemIsEnabled)
             self.table.setItem(row, col, item)
+        for col in [6, 8, 9]:
+            item = QTableWidgetItem("")
+            item.setFlags(Qt.ItemIsEnabled)
+            # self.table.horizontalHeader().setSectionsClickable(False)
+            self.table.setItem(row, col, item)
+    def onHeader(self, index):
+        if index == 0:
+            self.add_row()
 
     # ===== HANDLE CHANGE (FIXED) =====
     def handle_item_change(self, item):

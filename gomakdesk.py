@@ -13,28 +13,30 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
+    QDialog,
     QFrame,
     QMessageBox
 )
 
-class PurchaseInvoiceUI(QWidget):
+class PurchaseInvoiceUI(QDialog):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Purchase Invoice")
-        self.resize(1920, 950)
-        self.setMinimumSize(1600, 850)
+        # self.resize(1520, 950)
+        # self.setMinimumSize(1600, 850)
+        self.setGeometry(100, 50, 1200, 700)
 
         self.setStyleSheet("""
             QWidget{
                 background:#f3f3f3;
                 font-family: Segoe UI;
-                font-size:15px;
+                font-size:14px;
             }
 
             QLabel{
                 color:#111;
-                font-weight:600;
+                font-weight:300;
             }
 
             QLineEdit,QComboBox,QTextEdit{
@@ -43,7 +45,7 @@ class PurchaseInvoiceUI(QWidget):
                 border-radius:6px;
                 padding:10px;
                 color:#333;
-                font-size:15px;
+                font-size:14px;
             }
 
             QLineEdit:focus,QComboBox:focus,QTextEdit:focus{
@@ -56,8 +58,8 @@ class PurchaseInvoiceUI(QWidget):
                 border:none;
                 border-radius:6px;
                 padding:10px 18px;
-                font-size:15px;
-                font-weight:600;
+                font-size:14px;
+                font-weight:300;
             }
 
             QPushButton:hover{
@@ -76,7 +78,7 @@ class PurchaseInvoiceUI(QWidget):
                 padding:12px;
                 border:none;
                 border-bottom:2px solid #e0e0e0;
-                font-weight:700;
+                font-weight:300;
                 color:#222;
                 font-size:14px;
             }
@@ -84,8 +86,8 @@ class PurchaseInvoiceUI(QWidget):
             QTabBar::tab{
                 background:#d9d9d9;
                 padding:12px 30px;
-                font-size:15px;
-                font-weight:600;
+                font-size:14px;
+                font-weight:300;
                 border-top-left-radius:5px;
                 border-top-right-radius:5px;
                 margin-right:2px;
@@ -113,20 +115,20 @@ class PurchaseInvoiceUI(QWidget):
         top_layout.setContentsMargins(20, 10, 20, 10)
 
         menu = QLabel("☰")
-        menu.setStyleSheet("color:white;font-size:28px;font-weight:bold;")
+        menu.setStyleSheet("color:white;font-size:24px;font-weight:3old;")
 
         title = QLabel("PURCHASE INVOICES")
         title.setStyleSheet("""
             color:white;
-            font-size:30px;
-            font-weight:700;
+            font-size:34px;
+            font-weight:300;
         """)
 
         user = QLabel("JOSIAH. agvision.")
         user.setStyleSheet("""
             color:white;
-            font-size:18px;
-            font-weight:600;
+            font-size:14px;
+            font-weight:300;
         """)
 
         top_layout.addWidget(menu)
@@ -150,8 +152,8 @@ class PurchaseInvoiceUI(QWidget):
             QPushButton{
                 background:#55b84d;
                 color:white;
-                font-size:18px;
-                font-weight:700;
+                font-size:14px;
+                font-weight:300;
                 border-radius:6px;
                 padding:10px 20px;
             }
@@ -167,8 +169,8 @@ class PurchaseInvoiceUI(QWidget):
         invoice_info = QLabel("ISHIAQ STORE  11/05/2026 15:34")
         invoice_info.setStyleSheet("""
             color:white;
-            font-size:20px;
-            font-weight:500;
+            font-size:24px;
+            font-weight:300;
         """)
 
         for b in [print_btn, refresh_btn, search_btn]:
@@ -312,15 +314,15 @@ class PurchaseInvoiceUI(QWidget):
 
         amount_top = QLabel("Amount                              40,000.00")
         amount_top.setStyleSheet("""
-            font-size:18px;
-            font-weight:700;
+            font-size:14px;
+            font-weight:300;
             background:transparent;
         """)
 
         discount_label = QLabel("Discount")
         discount_label.setStyleSheet("""
-            font-size:18px;
-            font-weight:700;
+            font-size:14px;
+            font-weight:300;
             background:transparent;
         """)
 
@@ -329,8 +331,8 @@ class PurchaseInvoiceUI(QWidget):
 
         vat_label = QLabel("VAT")
         vat_label.setStyleSheet("""
-            font-size:18px;
-            font-weight:700;
+            font-size:14px;
+            font-weight:300;
             background:transparent;
         """)
 
@@ -340,8 +342,8 @@ class PurchaseInvoiceUI(QWidget):
 
         ngn = QLabel("NGN")
         ngn.setStyleSheet("""
-            font-size:48px;
-            font-weight:900;
+            font-size:44px;
+            font-weight:300;
             color:black;
             background:transparent;
         """)
@@ -349,8 +351,8 @@ class PurchaseInvoiceUI(QWidget):
         total = QLabel("40,000.00")
         total.setAlignment(Qt.AlignRight)
         total.setStyleSheet("""
-            font-size:50px;
-            font-weight:900;
+            font-size:54px;
+            font-weight:300;
             color:#444;
             background:transparent;
         """)
@@ -358,7 +360,7 @@ class PurchaseInvoiceUI(QWidget):
         unpaid = QLabel("Unpaid 40,000.00")
         unpaid.setAlignment(Qt.AlignRight)
         unpaid.setStyleSheet("""
-            font-size:16px;
+            font-size:14px;
             color:#2d7dd2;
             background:transparent;
         """)
@@ -385,6 +387,7 @@ class PurchaseInvoiceUI(QWidget):
         table.setMinimumHeight(300)
 
         headers = [
+            "+",
             "Product",
             "Description",
             "Warehouse",
@@ -467,7 +470,7 @@ class ModuleButton(QPushButton):
                 border-radius:37px;
                 color:#2d7dd2;
                 font-size:34px;
-                font-weight:600;
+                font-weight:300;
             }
         """)
 
@@ -478,8 +481,8 @@ class ModuleButton(QPushButton):
         label.setStyleSheet("""
             QLabel{
                 color:#111;
-                font-size:17px;
-                font-weight:500;
+                font-size:14px;
+                font-weight:300;
             }
         """)
 
@@ -494,8 +497,8 @@ class ModuleButton(QPushButton):
     # =====================================================
     def open_module(self):
         if self.module_name == "Purchases":
-            purchase_window = PurchaseInvoiceUI()
-            purchase_window.show()
+            self.purchase_window = PurchaseInvoiceUI()
+            self.purchase_window.show()
         else:
             QMessageBox.information(
             self,
@@ -513,8 +516,9 @@ class DashboardUI(QWidget):
         super().__init__()
 
         self.setWindowTitle("Wizard Cloud Dashboard")
-        self.resize(1920, 1000)
-        self.setMinimumSize(1400, 850)
+        # self.resize(1920, 1000)
+        self.setGeometry(100, 50, 1200, 700)
+        # self.setMinimumSize(1400, 850)
 
         self.setStyleSheet("""
             QWidget{
@@ -550,8 +554,8 @@ class DashboardUI(QWidget):
         menu = QLabel("☰")
         menu.setStyleSheet("""
             color:white;
-            font-size:28px;
-            font-weight:bold;
+            font-size:24px;
+            font-weight:3old;
         """)
 
         # ================= LOGO =================
@@ -560,16 +564,16 @@ class DashboardUI(QWidget):
 
         logo.setStyleSheet("""
             color:white;
-            font-size:16px;
-            font-weight:900;
+            font-size:14px;
+            font-weight:300;
         """)
 
         # ================= USER =================
         user = QLabel("JOSIAH. agvision.")
         user.setStyleSheet("""
             color:white;
-            font-size:15px;
-            font-weight:600;
+            font-size:14px;
+            font-weight:300;
         """)
 
         # =====================================================
@@ -585,8 +589,8 @@ class DashboardUI(QWidget):
                     border:none;
                     border-radius:19px;
                     color:white;
-                    font-size:17px;
-                    font-weight:bold;
+                    font-size:14px;
+                    font-weight:3old;
                 }
 
                 QPushButton:hover{
