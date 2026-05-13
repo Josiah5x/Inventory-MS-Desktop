@@ -1,21 +1,13 @@
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import (
     QApplication,
     QApplication, QWidget, QLabel, QPushButton, QLineEdit,
     QComboBox, QTextEdit, QHBoxLayout, QVBoxLayout,
     QGridLayout, QFrame, QTableWidget, QTableWidgetItem,
-    QHeaderView, QTabWidget,QCalendarWidget,
-    QWidget,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-    QGridLayout,
-    QDialog,
-    QFrame,
-    QMessageBox
+    QHeaderView, QTabWidget,QCalendarWidget,QWidget,QLabel,QPushButton,
+    QVBoxLayout,QHBoxLayout,QGridLayout,QDialog,QFrame,QMessageBox,QCompleter
 )
 
 class PurchaseInvoiceUI(QDialog):
@@ -399,51 +391,205 @@ class PurchaseInvoiceUI(QDialog):
         top_content.setContentsMargins(0,0,20,0)
 
         # ================= TABLE =================
-        table = QTableWidget(1, 11)
-        table.setMinimumHeight(300)
+        self.table = QTableWidget()
+        self.table.setColumnCount(11)
+        self.table.setColumnWidth(0, 10)
+        self.table.setColumnWidth(1, 300)
+        self.table.setColumnWidth(2, 120)
+        self.table.setColumnWidth(4, 90)
+        self.table.setHorizontalHeaderLabels([
+            "Product", "Description", "Warehouse",
+            "Qty", "Unit", "Unit Price", "Amount",	"Disc%","Discount", "Gross Amount","Product"
+        ])
 
-        headers = [
-            "Product",
-            "Description",
-            "Warehouse",
-            "Qty",
-            "Unit",
-            "Unit Price",
-            "Amount",
-            "Disc %",
-            "Discount",
-            "Gross Amount"
-        ]
 
-        table.setHorizontalHeaderLabels(headers)
+        # Optional: double click row to delete
+        # self.table.doubleClicked.connect(self.remove_row)
+        header_item = QTableWidgetItem("")
+        header_item.setIcon(QIcon("icons/add_32x32.png"))
+        self.table.setHorizontalHeaderItem(0, header_item)
+        self.table.horizontalHeader().sectionClicked.connect(self.onHeader)
 
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
+        self.table.itemChanged.connect(self.handle_item_change)
 
-        table.setItem(0, 1, QTableWidgetItem(
-            "SX460 Automatic Voltage Regulator"
-        ))
-        table.setItem(0, 1, QTableWidgetItem(""))
-        table.setItem(0, 2, QTableWidgetItem("--None--"))
-        table.setItem(0, 3, QTableWidgetItem("1.0000"))
-        table.setItem(0, 4, QTableWidgetItem("Pcs"))
-        table.setItem(0, 5, QTableWidgetItem("40,000.00"))
-        table.setItem(0, 6, QTableWidgetItem("40,000.00"))
-        table.setItem(0, 7, QTableWidgetItem("0.00"))
-        table.setItem(0, 8, QTableWidgetItem("0.00"))
-        table.setItem(0, 9, QTableWidgetItem("40,000.00"))
-        table.setItem(0, 10, QTableWidgetItem("40,000.00"))
-
-        table.setRowHeight(0, 55)
+        # ===== PRODUCTS =====
+        self.products = {
+            "Rice": 500,
+            "Beans": 400,
+            "Garri": 300,
+            "Sugar": 450
+        }
+        # ===== PRODUCTS =====
+        self.units = {
+            "1": "Pcs",
+            "2": "Set",
+            "3": "Ltr"
+        }
+        self.add_row()
 
         # ================= ADD TO MAIN =================
         content_layout.addLayout(top_content)
         content_layout.addSpacing(20)
-        content_layout.addWidget(table)
+        content_layout.addWidget(self.table)
 
         main_layout.addWidget(top_bar)
         main_layout.addWidget(action_bar)
         main_layout.addWidget(tabs)
+    # ===== SEARCHABLE DROPDOWN =====
+    def create_combo(self):
+        combo = QComboBox()
+        combo.setEditable(True)
+
+        items = list(self.units.values())
+        combo.addItems(items)
+
+        completer = QCompleter(items)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setFilterMode(Qt.MatchContains)
+
+        combo.setCompleter(completer)
+        return combo
+    # ===== ADD ROW =====
+    def add_row(self):
+        row = self.table.rowCount()
+        self.table.insertRow(row)
+
+        combo = self.create_combo()
+      
+        self.table.setCellWidget(row, 4, combo)
+
+        # 🔍 QLineEdit with dropdown
+        line = QLineEdit()
+        line.setPlaceholderText("Search product...")
+
+        items = list(self.products.keys())
+        completer = QCompleter(items)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setFilterMode(Qt.MatchContains)
+
+        line.setCompleter(completer)
+
+        # Show dropdown while typing
+        line.textEdited.connect(lambda: completer.complete())
+
+        # When selected
+        line.editingFinished.connect(
+            lambda r=row, le=line: self.product_selected(r, le.text())
+        )
+
+        self.table.setCellWidget(row, 1, line)
+
+
+
+        # Default values
+        for col in [3, 5, 7]:
+            item = QTableWidgetItem("0")
+            item.setTextAlignment(Qt.AlignRight)
+            self.table.setItem(row, col, item)
+
+        # Read-only calculated fields
+        for col in [0, 6, 8, 9]:
+            item = QTableWidgetItem("")
+            item.setFlags(Qt.ItemIsEnabled)
+            self.table.setItem(row, col, item)
+        for col in [6, 8, 9]:
+            item = QTableWidgetItem("")
+            item.setFlags(Qt.ItemIsEnabled)
+            # self.table.horizontalHeader().setSectionsClickable(False)
+            self.table.setItem(row, col, item)
+    def onHeader(self, index):
+        if index == 0:
+            self.add_row()
+
+    # ===== HANDLE CHANGE (FIXED) =====
+    def handle_item_change(self, item):
+        row = item.row()
+        col = item.column()
+
+        product = self.get_value(row, 0)
+
+        if not product:
+            return
+
+        if col in [0, 3, 5, 6, 8, 9]:
+            self.calculate_row(row)
+            # print("Hiiii")
+        
+
+    # ===== PRODUCT SELECT =====
+    def product_selected(self, row, name):
+        if name not in self.products:
+            return
+        price = self.products[name]
+
+        self.table.blockSignals(True)
+        self.table.setItem(row, 5, QTableWidgetItem(str(price)))
+        self.table.blockSignals(False)
+
+        self.calculate_row(row)
+    # ===== CALCULATE =====
+    def calculate_row(self, row):
+        try:
+            qty = float(self.get_value(row, 3))
+            price = float(self.get_value(row, 5))
+            disc = float(self.get_value(row, 7))
+
+            amount = qty * price
+            discount = (disc / 100) * amount
+            gross = amount - discount
+
+            self.table.blockSignals(True)
+
+            self.table.setItem(row, 6, QTableWidgetItem(f"{amount:,.2f}"))
+            self.table.setItem(row, 8, QTableWidgetItem(f"{discount:,.2f}"))
+            self.table.setItem(row, 9, QTableWidgetItem(f"{gross:,.2f}"))
+
+            self.table.blockSignals(False)
+
+            self.update_total()
+
+        except:
+            pass
+
+    # ===== TOTAL =====
+    def update_total(self):
+        total = 0
+        naira_words_conv = 0
+        for row in range(self.table.rowCount()):
+            try:
+                clean_val = self.get_value(row, 9).replace(",", "")
+                total += float(clean_val)
+            except:
+                pass
+
+        self.total_label.setText(f"Total: {total:,.2f}")
+
+    # ===== GET VALUE =====
+    def get_value(self, row, col):
+        widget = self.table.cellWidget(row, col)
+        if widget:
+            return widget.text()
+
+        item = self.table.item(row, col)
+        return item.text() if item else "0"
+    # =================  AMOUNT TO NAIRA FUNCTION =================
+    def ngn_to_words(self, amount):
+        # Split naira and kobo
+        naira = int(amount)
+        kobo = int(round((amount - naira) * 100))
+        
+        naira_words = num2words(naira)
+        
+        if kobo > 0:
+            kobo_words = num2words(kobo)
+            return f"{naira_words.capitalize()} Naira and {kobo_words} Kobo".replace(" and", ",")
+        else:
+            return f"{naira_words.capitalize()} Naira"
+    # ================= REMOVE ROW FUNCTION =================
+    def remove_row(self):
+        row = self.table.currentRow()
+        if row >= 0:
+            self.table.removeRow(row)
 
         
 
