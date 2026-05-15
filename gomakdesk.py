@@ -10,20 +10,20 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,QHBoxLayout,QGridLayout,QDialog,QFrame,QMessageBox,QCompleter
 )
 
-class PurchaseInvoiceUI(QDialog):
+class PurchaseInvoiceUI(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Purchase Invoice")
-        self.resize(1520, 950)
-        # self.setMinimumSize(1600, 850)
+        # self.resize(1520, 950)
+        self.setMinimumSize(1600, 850)
         # self.setGeometry(0, 0, 100, 400)
 
         self.setStyleSheet("""
             QWidget{
                 background:#f3f3f3;
                 font-family: Roboto;
-                font-size:12px;
+                font-size:15px;
             }
 
             QLabel{
@@ -37,7 +37,7 @@ class PurchaseInvoiceUI(QDialog):
                 border-radius:6px;
                 padding:12px;
                 color:#333;
-                font-size:12px;
+                font-size:15px;
             }
 
             QLineEdit:focus,QComboBox:focus,QTextEdit:focus{
@@ -50,7 +50,7 @@ class PurchaseInvoiceUI(QDialog):
                 border:none;
                 border-radius:6px;
                 padding:12px 18px;
-                font-size:12px;
+                font-size:15px;
                 font-weight:300;
             }
 
@@ -58,11 +58,12 @@ class PurchaseInvoiceUI(QDialog):
                 background:#1f6dc0;
             }
 
-            QTableWidget{
-                background:white;
-                border:none;
+            QTableWidget:hover{
+                background:#EDF5F0;
+                border:1px solid #ddd;
                 gridline-color:#e5e5e5;
-                font-size:12px;
+                font-size:13px;
+                padding: 15px;
             }
 
             QHeaderView::section{
@@ -72,13 +73,13 @@ class PurchaseInvoiceUI(QDialog):
                 border-bottom:2px solid #e0e0e0;
                 font-weight:300;
                 color:#222;
-                font-size:12px;
+                font-size:15px;
             }
 
             QTabBar::tab{
                 background:#d9d9d9;
                 padding:12px 30px;
-                font-size:12px;
+                font-size:15px;
                 font-weight:300;
                 border-top-left-radius:5px;
                 border-top-right-radius:5px;
@@ -101,25 +102,25 @@ class PurchaseInvoiceUI(QDialog):
         # ================= TOP BLUE BAR =================
         top_bar = QFrame()
         top_bar.setFixedHeight(50)
-        top_bar.setStyleSheet("background:#2d7dd2;")
+        top_bar.setStyleSheet("background:orange;")
 
         top_layout = QHBoxLayout(top_bar)
         top_layout.setContentsMargins(20, 10, 20, 10)
 
         menu = QLabel("☰")
-        menu.setStyleSheet("color:white;font-size:12px;font-weight:bold;")
+        menu.setStyleSheet("color:white;font-size:15px;font-weight:bold;")
 
         title = QLabel("PURCHASE INVOICES")
         title.setStyleSheet("""
             color:white;
-            font-size:12px;
+            font-size:15px;
             font-weight:300;
         """)
 
         user = QLabel("JOSIAH. agvision.")
         user.setStyleSheet("""
             color:white;
-            font-size:12px;
+            font-size:15px;
             font-weight:300;
         """)
 
@@ -131,7 +132,7 @@ class PurchaseInvoiceUI(QDialog):
 
         # ================= ACTION BAR =================
         action_bar = QFrame()
-        action_bar.setFixedHeight(50)
+        action_bar.setFixedHeight(60)
         action_bar.setStyleSheet("background:#575757;")
 
         action_layout = QHBoxLayout(action_bar)
@@ -139,12 +140,27 @@ class PurchaseInvoiceUI(QDialog):
         action_layout.setSpacing(15)
 
         new_btn = QPushButton("➕ New")
-        new_btn.setFixedHeight(35)
+        new_btn.setFixedHeight(45)
         new_btn.setStyleSheet("""
             QPushButton{
                 background:#55b84d;
                 color:white;
-                font-size:12px;
+                font-size:15px;
+                font-weight:300;
+                border-radius:6px;
+                padding:12px 20px;
+            }
+            QPushButton:hover{
+                background:#4ca644;
+            }
+        """)
+        save_btn = QPushButton("Save")
+        save_btn.setFixedHeight(45)
+        save_btn.setStyleSheet("""
+            QPushButton{
+                background:#19B2FF;
+                color:white;
+                font-size:15px;
                 font-weight:300;
                 border-radius:6px;
                 padding:12px 20px;
@@ -161,7 +177,7 @@ class PurchaseInvoiceUI(QDialog):
         invoice_info = QLabel("ISHIAQ STORE  11/05/2026 15:34")
         invoice_info.setStyleSheet("""
             color:white;
-            font-size:12px;
+            font-size:15px;
             font-weight:300;
         """)
 
@@ -169,6 +185,7 @@ class PurchaseInvoiceUI(QDialog):
             b.setFixedHeight(45)
 
         action_layout.addWidget(new_btn)
+        action_layout.addWidget(save_btn)
         action_layout.addWidget(print_btn)
         action_layout.addSpacing(25)
         action_layout.addWidget(refresh_btn)
@@ -197,7 +214,7 @@ class PurchaseInvoiceUI(QDialog):
         # ================= LEFT FORM =================
         left_form = QFrame()
         left_layout = QGridLayout(left_form)
-        left_layout.setContentsMargins(0,0,30,0)
+        left_layout.setContentsMargins(0,0,150,0)
         left_layout.setVerticalSpacing(2)
         left_layout.setHorizontalSpacing(2)
 
@@ -214,16 +231,16 @@ class PurchaseInvoiceUI(QDialog):
         inv2.setFixedHeight(42)
         inv3.setFixedHeight(42)
         # 
-        # inv2.setFixedWidth(42)
-        # inv1.setFixedWidth(42)
-        # inv3.setFixedWidth(42)
+        # inv2.setFixedWidth(100)
+        # inv1.setFixedWidth(100)
+        # inv3.setFixedWidth(100)
 
         invoice_box = QHBoxLayout()
         invoice_box.addWidget(inv1)
         invoice_box.addWidget(inv2)
         invoice_box.addWidget(inv3)
-        invoice_box.setContentsMargins(0,0,300,0)
-        # invoice_box.setSpacing(0)
+        invoice_box.setContentsMargins(0,0,345,0)
+        invoice_box.setStretch(0,0)
 
         invoice_widget = QWidget()
         invoice_widget.setLayout(invoice_box)
@@ -235,7 +252,7 @@ class PurchaseInvoiceUI(QDialog):
 
         supplier_invoice = QLineEdit("#0129")
         supplier_invoice.setFixedHeight(42)
-        supplier_invoice.setFixedWidth(200)
+        supplier_invoice.setFixedWidth(345)
 
         left_layout.addWidget(supplier_invoice, row, 3)
 
@@ -247,7 +264,7 @@ class PurchaseInvoiceUI(QDialog):
         # date_edit = QLineEdit("11/05/2026")
         self.date_input = DateLineEdit()
         self.date_input.setFixedHeight(42)
-        self.date_input.setFixedWidth(350)
+        self.date_input.setFixedWidth(380)
 
         left_layout.addWidget(self.date_input, row, 1)
 
@@ -257,7 +274,7 @@ class PurchaseInvoiceUI(QDialog):
         currency = QComboBox()
         currency.addItems(["NGN", "USD", "EUR"])
         currency.setFixedHeight(42)
-        currency.setFixedWidth(200)
+        currency.setFixedWidth(350)
 
         left_layout.addWidget(currency, row, 3)
 
@@ -269,7 +286,7 @@ class PurchaseInvoiceUI(QDialog):
         supplier = QComboBox()
         supplier.addItem("CEEJAY ELECTRICAL TECHNOLOGY LTD")
         supplier.setFixedHeight(42)
-        supplier.setFixedWidth(350)
+        supplier.setFixedWidth(380)
 
         left_layout.addWidget(supplier, row, 1)
 
@@ -279,7 +296,7 @@ class PurchaseInvoiceUI(QDialog):
         credit = QComboBox()
         credit.addItems(["CREDIT", "CASH"])
         credit.setFixedHeight(42)
-        credit.setFixedWidth(200)
+        credit.setFixedWidth(350)
 
         left_layout.addWidget(credit, row, 3)
 
@@ -291,7 +308,7 @@ class PurchaseInvoiceUI(QDialog):
         address = QTextEdit()
         address.setText("ABUJA")
         address.setFixedHeight(90)
-        address.setFixedWidth(350)
+        address.setFixedWidth(380)
 
         left_layout.addWidget(address, row, 1)
 
@@ -302,13 +319,12 @@ class PurchaseInvoiceUI(QDialog):
 
         project = QLineEdit()
         project.setFixedHeight(42)
-        project.setFixedWidth(350)
+        project.setFixedWidth(380)
 
         left_layout.addWidget(project, row, 1)
 
         # ================= SUMMARY PANEL =================
         summary = QFrame()
-        # summary.setFixedWidth(200)
         summary.setStyleSheet("""
             QFrame{
                 background:#dfeaf4;
@@ -321,14 +337,14 @@ class PurchaseInvoiceUI(QDialog):
 
         amount_top = QLabel("Amount                              42,000.00")
         amount_top.setStyleSheet("""
-            font-size:12px;
+            font-size:15px;
             font-weight:600;
             background:transparent;
         """)
 
         discount_label = QLabel("Discount")
         discount_label.setStyleSheet("""
-            font-size:12px;
+            font-size:15px;
             font-weight:600;
             background:transparent;
         """)
@@ -338,7 +354,7 @@ class PurchaseInvoiceUI(QDialog):
 
         vat_label = QLabel("VAT")
         vat_label.setStyleSheet("""
-            font-size:12px;
+            font-size:15px;
             font-weight:600;
             background:transparent;
         """)
@@ -349,7 +365,7 @@ class PurchaseInvoiceUI(QDialog):
 
         ngn = QLabel("NGN")
         ngn.setStyleSheet("""
-            font-size:12px;
+            font-size:15px;
             font-weight:600;
             color:black;
             background:transparent;
@@ -358,7 +374,7 @@ class PurchaseInvoiceUI(QDialog):
         total = QLabel("42,000.00")
         total.setAlignment(Qt.AlignRight)
         total.setStyleSheet("""
-            font-size:12px;
+            font-size:15px;
             font-weight:600;
             color:#444;
             background:transparent;
@@ -367,7 +383,7 @@ class PurchaseInvoiceUI(QDialog):
         unpaid = QLabel("Unpaid 42,000.00")
         unpaid.setAlignment(Qt.AlignRight)
         unpaid.setStyleSheet("""
-            font-size:12px;
+            font-size:15px;
             color:#2d7dd2;
             background:transparent;
         """)
@@ -399,8 +415,8 @@ class PurchaseInvoiceUI(QDialog):
         self.table.setColumnWidth(2, 120)
         self.table.setColumnWidth(4, 90)
         self.table.setHorizontalHeaderLabels([
-            "Product", "Description", "Warehouse",
-            "Qty", "Unit", "Unit Price", "Amount",	"Disc%","Discount", "Gross Amount","Product"
+            "","Product", "Description", "Warehouse",
+            "Qty", "Unit", "Unit Price", "Amount",	"Disc%","Discount", "Gross Amount"
         ])
 
 
@@ -427,6 +443,7 @@ class PurchaseInvoiceUI(QDialog):
             "3": "Ltr"
         }
         self.add_row()
+        save_btn.clicked.connect(self.save_data)
 
         # ================= ADD TO MAIN =================
         content_layout.addLayout(top_content)
@@ -450,13 +467,30 @@ class PurchaseInvoiceUI(QDialog):
 
         combo.setCompleter(completer)
         return combo
+    #======== save data ========
+    def save_data(self):
+        data = []
+        # Iterate through each row
+        for row in range(self.table.rowCount()):
+            row_data = []
+            # Iterate through each column in that row
+            for column in range(self.table.columnCount()):
+                item = self.table.item(row, column)
+                # Check if the item exists (it might be None if the cell is empty)
+                if item is not None:
+                    row_data.append(item.text())
+                else:
+                    row_data.append("")  # Handle empty cells
+            data.append(row_data)
+        for i in range(len(data)):
+            print(data[i][2], "356")
+
     # ===== ADD ROW =====
     def add_row(self):
         row = self.table.rowCount()
         self.table.insertRow(row)
 
         combo = self.create_combo()
-      
         self.table.setCellWidget(row, 4, combo)
 
         # 🔍 QLineEdit with dropdown
@@ -489,7 +523,7 @@ class PurchaseInvoiceUI(QDialog):
             self.table.setItem(row, col, item)
 
         # Read-only calculated fields
-        for col in [0, 6, 8, 9]:
+        for col in [6, 8, 9]:
             item = QTableWidgetItem("")
             item.setFlags(Qt.ItemIsEnabled)
             self.table.setItem(row, col, item)
@@ -674,7 +708,7 @@ class ModuleButton(QPushButton):
                 border:1px solid #d6d6d6;
                 border-radius:37px;
                 color:#2d7dd2;
-                font-size:12px;
+                font-size:15px;
                 font-weight:300;
             }
         """)
@@ -686,7 +720,7 @@ class ModuleButton(QPushButton):
         label.setStyleSheet("""
             QLabel{
                 color:#111;
-                font-size:12px;
+                font-size:15px;
                 font-weight:300;
             }
         """)
@@ -760,8 +794,8 @@ class DashboardUI(QWidget):
         menu = QLabel("☰")
         menu.setStyleSheet("""
             color:white;
-            font-size:12px;
-            font-weight:3old;
+            font-size:15px;
+            font-weight:300;
         """)
 
         # ================= LOGO =================
@@ -770,7 +804,7 @@ class DashboardUI(QWidget):
 
         logo.setStyleSheet("""
             color:white;
-            font-size:12px;
+            font-size:15px;
             font-weight:300;
         """)
 
@@ -778,7 +812,7 @@ class DashboardUI(QWidget):
         user = QLabel("JOSIAH. agvision.")
         user.setStyleSheet("""
             color:white;
-            font-size:12px;
+            font-size:15px;
             font-weight:300;
         """)
 
@@ -795,8 +829,8 @@ class DashboardUI(QWidget):
                     border:none;
                     border-radius:19px;
                     color:white;
-                    font-size:12px;
-                    font-weight:3old;
+                    font-size:15px;
+                    font-weight:300;
                 }
 
                 QPushButton:hover{
@@ -904,7 +938,7 @@ class DashboardUI(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    # app.setFont(QFont("Roboto", 1))
+    app.setFont(QFont("Roboto", 13))
     app.setStyle('Fusion') 
     window = PurchaseInvoiceUI()
     window.show()
